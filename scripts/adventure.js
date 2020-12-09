@@ -28,6 +28,10 @@ button1.addEventListener("click", function(){
 		case 3: //Players hides in the trees and gets found
 			death("You hid yourself in the tree, but in a matter of seconds the werewolf found you and killed you.");
 			break;
+
+		case 100:
+			location.reload();
+			break;
 	}
 });
 
@@ -47,7 +51,7 @@ button3.addEventListener("click", function(){
 	switch(level)
 	{
 		case 3: //Player attacks the werewolf with the knife he found
-			//
+			killWolf("You let yourself fall out of the tree with your knife in your hands. You fall on top of the werewolf and plunge your knife deep into its skull.");
 			break;
 	}
 });
@@ -171,6 +175,25 @@ function level3()
 }
 
 
+
+function killWolf(killText)
+{
+	level = 100;
+	console.log("VICTORY");
+
+	description.innerHTML 				= "<p>"+killText+"</p>";
+	
+	container.style.backgroundImage 	= 'url("images/survived.png")';
+	container.style.backgroundSize		= "contain";
+	container.style.backgroundPosition 	= "0 100px";
+
+	title.innerHTML						= "You survived";
+
+	button1.innerHTML					= "Play again";
+	button2.style.display				= "none";
+	button3.style.display				= "none";
+	inventoryItem.style.display			= "none";
+}
 
 function timer(oldLevel, time)
 {
