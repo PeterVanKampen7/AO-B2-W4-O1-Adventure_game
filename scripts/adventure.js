@@ -7,14 +7,15 @@ var button2			= document.getElementById("button2");
 var button3			= document.getElementById("button3");
 var inventoryItem	= document.getElementById("inventoryItem");
 var level			= -1;
-var killTime 		= 4000;
+const KILLTIME 		= 4000;
 var knife			= false;
-var trap			= false;
+var beartrap		= false;
 var key				= false;
 
 title.innerHTML 	= "Moonlight Persuit";
 button1.innerHTML 	= "Proceed into The Night";
-
+button1.onclick		= level0;
+/*
 button1.addEventListener("click", function(){
 	switch(level)
 	{
@@ -68,6 +69,7 @@ button3.addEventListener("click", function(){
 			break;
 	}
 });
+*/
 
 function death(message)
 {
@@ -115,8 +117,12 @@ function level0()
 
 	button1.style.fontFamily			= '"Roboto", sans-serif';
 	button1.innerHTML					= '"Im sure it is nothing"';
+	button1.onclick						= function(){
+		death("You were sure it was nothing, but it certainly was something. You end up being mauled by a werewolf.");
+	}
 	button2.style.display				= "inline-block";
 	button2.innerHTML					= 'RUN!';
+	button2.onclick						= level1;
 }
 
 function level1()
@@ -132,7 +138,21 @@ function level1()
 	title.innerHTML						= "Flight through the woods"
 
 	button1.innerHTML					= "Keep running";
+	button1.onclick						= function(){
+		if(!knife)
+		{
+			inventoryItem.style.display = "none";
+		}
+		level2();
+	}
 	button2.innerHTML					= "Climb a tree";
+	button2.onclick						= function(){
+		if(!knife)
+		{
+			inventoryItem.style.display = "none";
+		}
+		level3();
+	}
 
 	inventoryItem.src					= "images/knife.png"
 	inventoryItem.style.display			= "inline";
@@ -151,7 +171,7 @@ function level1()
 		knife = true;
 	});
 
-	timer(level, killTime);
+	timer(level);
 }
 
 function level2()
@@ -161,7 +181,7 @@ function level2()
 
 
 
-	timer(level, killTime);
+	timer(level);
 }
 
 function level3()
@@ -177,14 +197,21 @@ function level3()
 	title.innerHTML						= "In the trees";
 
 	button1.innerHTML					= "Hide yourself between the leaves.";
+	button1.onclick						= function(){
+		death("You hid yourself in the tree, but in a matter of seconds the werewolf found you and killed you.");
+	}
 	button2.innerHTML					= "Jump to the next tree.";
+	button2.onclick						= level4;
 	if(knife)
 	{
 		button3.style.display 			= "inline-block"
 		button3.innerHTML				= "Attack with your knife";
+		button3.onclick					= function(){
+			killWolf("You let yourself fall out of the tree with your knife in your hands. You fall on top of the werewolf and plunge your knife deep into its skull.");
+		}
 	}
 					
-	timer(level, killTime);
+	timer(level);
 }
 
 function level4()
@@ -200,10 +227,12 @@ function level4()
 	title.innerHTML						= "The Treehouse";
 
 	button1.innerHTML					= "Take the rope down to the floor";
+	button1.onclick						= level7;
 	button2.innerHTML					= "Enter the treehouse";
+	button2.onclick						= level5;
+	button3.style.display				= "none";
 
-
-	timer(level, killTime);
+	timer(level);
 }
 
 function level5()
@@ -213,19 +242,54 @@ function level5()
 
 	description.innerHTML				= "<p>You enter the treehouse, you could maybe make a stand here if you barricade the door.</p>";
 
-	container.style.backgroundImage		= 'url("")';
+	container.style.backgroundImage		= 'url("images/treehouseInner.jpg")';
 	container.style.backgroundPosition 	= "";
 
 	title.innerHTML						= "Inside the Treehouse";
 
 	button1.innerHTML					= "Barricade the door";
-	button2.innerHTML					= "Leave the treehouse and run";
+	button1.onclick						= function(){
+		console.log("TEST");
+		if(beartrap && knife){
+			killWolf("You barricaded yourself in the treehouse and you set the beartrap you found in front of the door. The werewolf breaks through the door and instantly steps into the beartrap, giving you an opening. You strike the werewolf and pierce his heart with your knife.");
+		}
+		else if(knife){
+			death("You barricade yourself into the treehouse. The werewolf breaks through the door. You try to swing at it with your knife, but to no avail.");
+		}
+		else{
+			death("You barricade yourself into the treehouse. The werewolf breaks through the door leaving you nowhere to go.");
+		}
+	};
 	
-	container.innerHTML 				+= '<img src="beartrap.png" alt="beartrap" id="trap">';
+	button2.innerHTML					= "Leave the treehouse and run";
+	button2.onclick						= level7;
+
+	container.innerHTML 				+= '<img src="images/beartrap.png" alt="beartrap" id="trap">';
+	
 	var trap = document.getElementById("trap");
+	trap.style.display			= "inline-block";
+	trap.style.width			= "90px";
+	trap.style.height			= "120px";
+	trap.style.right			= "810px";
+	trap.style.bottom 			= "110px";
+
+	trap.addEventListener("click", function(){
+		trap.style.width		= "50px";
+		trap.style.height		= "60px";
+		trap.style.bottom 		= "5px";
+		trap.style.border		= "3px solid black";
+		trap.style.filter		= "brightness(100%)";
+		beartrap = true;
+		if(!knife){
+			trap.style.right		= "20px";
+		}
+		else{
+			trap.style.right		= "115px";
+		}
+	});
 	
 
-	timer(level, killTime);
+	timer(level);
 }
 
 function level6()
@@ -244,7 +308,26 @@ function level6()
 	button2.innerHTML					= "";
 	
 
-	timer(level, killTime);
+	timer(level);
+}
+
+function level7()
+{
+	level = 7;
+	console.log("LEVEL "+level);
+
+	description.innerHTML				= "<p></p>";
+
+	container.style.backgroundImage		= 'url("")';
+	container.style.backgroundPosition 	= "";
+
+	title.innerHTML						= "";
+
+	button1.innerHTML					= "";
+	button2.innerHTML					= "";
+	
+
+	timer(level);
 }
 
 function killWolf(killText)
@@ -266,12 +349,12 @@ function killWolf(killText)
 	inventoryItem.style.display			= "none";
 }
 
-function timer(oldLevel, time)
+function timer(oldLevel)
 {
 	setTimeout(function(){
 		if(level == oldLevel)
 		{
 			//death();
 		}
-	}, time);
+	}, KILLTIME);
 }
