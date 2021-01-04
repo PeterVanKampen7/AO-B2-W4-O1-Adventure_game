@@ -7,7 +7,7 @@ var button2			= document.getElementById("button2");
 var button3			= document.getElementById("button3");
 var inventoryItem	= document.getElementById("inventoryItem");
 var level			= -1;
-const KILLTIME 		= 4000;
+const KILLTIME 		= 2500;
 var knife			= false;
 var beartrap		= false;
 var key				= false;
@@ -83,7 +83,7 @@ function level1()
 	level = 1;
 	console.log("LEVEL "+level);
 
-	description.innerHTML 				= "<p>You are running through the woods, behind you in the distance you can hear the footfalls and the growls of the werewolf!</p>";
+	description.innerHTML 				= "<p>You are running through the woods, behind you in the distance you can hear the footfalls and the growls of the werewolf! If you dont make decisions fast the werewolf will surely catch up!</p>";
 	
 	container.style.backgroundImage 	= 'url("images/darkPath.jpg")';
 	container.style.backgroundPosition 	= "0 50px";
